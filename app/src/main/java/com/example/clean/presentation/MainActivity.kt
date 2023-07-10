@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         Log.e("AAA", "Activity created")
 
-        vm = ViewModelProvider(this)[MainViewModel::class.java]
+        vm = ViewModelProvider(this, MainViewModelFactory(this))[MainViewModel::class.java]
 
         val dataTextView = findViewById<TextView>(R.id.dataTextView)
         val dataEditView = findViewById<EditText>(R.id.dataEditText)
