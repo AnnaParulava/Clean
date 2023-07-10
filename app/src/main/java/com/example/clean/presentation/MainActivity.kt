@@ -2,9 +2,11 @@ package com.example.clean.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import com.example.clean.R
 import com.example.clean.data.repository.UserRepositoryImpl
 import com.example.clean.data.storage.SharedPrefUserStorage
@@ -31,9 +33,15 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private lateinit var vm: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        Log.e("AAA", "Activity created")
+
+        vm = ViewModelProvider(this)[MainViewModel::class.java]
 
         val dataTextView = findViewById<TextView>(R.id.dataTextView)
         val dataEditView = findViewById<EditText>(R.id.dataEditText)
@@ -42,14 +50,11 @@ class MainActivity : AppCompatActivity() {
 
         sendButton.setOnClickListener {
             val text = dataEditView.text.toString()
-            val params = com.example.clean.domain.models.SaveUserNameParam(name = text)
-            val result = saveUserNameParamUseCase.execute(param = params)
-            dataTextView.text = "Save result = $result"
+            dataTextView.text = vm.save(text)
         }
 
         receiveButton.setOnClickListener {
-            val userName: com.example.clean.domain.models.Username = getUserNameUseCase.execute()
-            dataTextView.text = "${userName.firstName} ${userName.lastName}"
+            dataTextView.text = vm.load()
         }
     }
 }
