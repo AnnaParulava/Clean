@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.clean.R
 import com.example.clean.data.repository.UserRepositoryImpl
@@ -23,12 +24,12 @@ class MainActivity : AppCompatActivity() {
         )
     }
     private val getUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) {
-        com.example.clean.domain.usecase.GetUserNameUseCase(
+        GetUserNameUseCase(
             userRepository
         )
     }
     private val saveUserNameParamUseCase by lazy(LazyThreadSafetyMode.NONE) {
-        com.example.clean.domain.usecase.SaveUserNameUseCase(
+        SaveUserNameUseCase(
             userRepository
         )
     }
@@ -48,13 +49,17 @@ class MainActivity : AppCompatActivity() {
         val sendButton = findViewById<Button>(R.id.sendButton)
         val receiveButton = findViewById<Button>(R.id.receiveButton)
 
+        vm.resultLive.observe(this, Observer {
+            dataTextView.text = it
+        })
+
         sendButton.setOnClickListener {
             val text = dataEditView.text.toString()
-            dataTextView.text = vm.save(text)
+            vm.save(text)
         }
 
         receiveButton.setOnClickListener {
-            dataTextView.text = vm.load()
+            vm.load()
         }
     }
 }

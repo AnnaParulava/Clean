@@ -1,6 +1,7 @@
 package com.example.clean.presentation
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.clean.data.repository.UserRepositoryImpl
 import com.example.clean.data.storage.SharedPrefUserStorage
@@ -12,6 +13,9 @@ class MainViewModel(
     private val getUserNameUseCase: GetUserNameUseCase,
     private val saveUserNameParamUseCase: SaveUserNameUseCase
 ) : ViewModel() {
+
+    val resultLive = MutableLiveData<String>()
+
     init {
         Log.e("AAA", "VM created")
     }
@@ -21,14 +25,14 @@ class MainViewModel(
         super.onCleared()
     }
 
-    fun save(text: String): String {
+    fun save(text: String) {
         val params = com.example.clean.domain.models.SaveUserNameParam(name = text)
         val result = saveUserNameParamUseCase.execute(param = params)
-        return "Save result = $result"
+        resultLive.value = "Save result = $result"
     }
 
-    fun load(): String {
+    fun load() {
         val userName: com.example.clean.domain.models.Username = getUserNameUseCase.execute()
-        return "${userName.firstName} ${userName.lastName}"
+        resultLive.value = "${userName.firstName} ${userName.lastName}"
     }
 }
