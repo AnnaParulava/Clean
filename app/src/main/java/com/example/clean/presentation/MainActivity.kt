@@ -15,41 +15,23 @@ import com.example.clean.domain.models.SaveUserNameParam
 import com.example.clean.domain.models.Username
 import com.example.clean.domain.usecase.GetUserNameUseCase
 import com.example.clean.domain.usecase.SaveUserNameUseCase
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val userRepository by lazy(LazyThreadSafetyMode.NONE) {
-        UserRepositoryImpl(
-            SharedPrefUserStorage(applicationContext)
-        )
-    }
-    private val getUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) {
-        GetUserNameUseCase(
-            userRepository
-        )
-    }
-    private val saveUserNameParamUseCase by lazy(LazyThreadSafetyMode.NONE) {
-        SaveUserNameUseCase(
-            userRepository
-        )
-    }
-
-    private lateinit var vm: MainViewModel
+    private val vm by viewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.e("AAA", "Activity created")
-
-        vm = ViewModelProvider(this, MainViewModelFactory(this))[MainViewModel::class.java]
 
         val dataTextView = findViewById<TextView>(R.id.dataTextView)
         val dataEditView = findViewById<EditText>(R.id.dataEditText)
         val sendButton = findViewById<Button>(R.id.sendButton)
         val receiveButton = findViewById<Button>(R.id.receiveButton)
 
-        vm.resultLive.observe(this, Observer {
+        vm._resultLive.observe(this, Observer {
             dataTextView.text = it
         })
 

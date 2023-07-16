@@ -1,6 +1,7 @@
 package com.example.clean.presentation
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.clean.data.repository.UserRepositoryImpl
@@ -14,7 +15,8 @@ class MainViewModel(
     private val saveUserNameParamUseCase: SaveUserNameUseCase
 ) : ViewModel() {
 
-    val resultLive = MutableLiveData<String>()
+    private val resultLive = MutableLiveData<String>()
+    val _resultLive: LiveData<String> = resultLive
 
     init {
         Log.e("AAA", "VM created")
