@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        (applicationContext as App).appComponent
+        (applicationContext as App).appComponent.inject(this)
 
         vm = ViewModelProvider(this, vmFactory)
             .get(MainViewModel::class.java)
