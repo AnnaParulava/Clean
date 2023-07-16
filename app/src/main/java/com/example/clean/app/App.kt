@@ -1,23 +1,20 @@
 package com.example.clean.app
 
 import android.app.Application
-import com.example.clean.di.appModule
-import com.example.clean.di.dataModule
-import com.example.clean.di.domainModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
+import com.example.clean.di.AppComponent
+import com.example.clean.di.AppModule
+import com.example.clean.di.DaggerAppComponent
 
 class App: Application() {
 
+    lateinit var appComponent: AppComponent
+
     override fun onCreate() {
         super.onCreate()
-//
-//        startKoin {
-//            androidLogger(Level.ERROR)
-//            androidContext(this@App)
-//            modules(listOf(appModule, domainModule, dataModule))
-//        }
+
+        appComponent = DaggerAppComponent
+            .builder()
+            .appModule(AppModule(this))
+            .build()
     }
 }

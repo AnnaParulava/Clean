@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.clean.R
+import com.example.clean.app.App
 import com.example.clean.data.repository.UserRepositoryImpl
 import com.example.clean.data.storage.SharedPrefUserStorage
 import com.example.clean.domain.models.SaveUserNameParam
@@ -16,15 +17,22 @@ import com.example.clean.domain.models.Username
 import com.example.clean.domain.usecase.GetUserNameUseCase
 import com.example.clean.domain.usecase.SaveUserNameUseCase
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private val vm by viewModel<MainViewModel>()
+    @Inject
+    lateinit var vmFactory: ViewModelFactory
+    private lateinit var vm: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        (applicationContext as App).appComponent
+
+        vm = ViewModelProvider(this, vmFactory)
+            .get(MainViewModel::class.java)
 
         val dataTextView = findViewById<TextView>(R.id.dataTextView)
         val dataEditView = findViewById<EditText>(R.id.dataEditText)
